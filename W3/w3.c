@@ -34,5 +34,5 @@ int PowN(int n)
       return 1;
    }
 
-      return(PowN(n - 1) + PowN(n - 1));
+   return(PowN(n - 1) + PowN(n - 1));
 }
