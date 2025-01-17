@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
    printf("%i\n", res);
 }
 
+// Calculate 2^n given an input n
 int PowN(int n)
 {
    if(n <= 0)
