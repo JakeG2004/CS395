@@ -25,6 +25,15 @@ int main(int argc, char* argv[])
    Permutations(n, 0, 0, 0);
 }
 
+void Permutations(int dig, int currentDepth)
+{
+   for(int i = 0; i < dig; i++)
+   {
+      
+   }
+}
+
+/*
 void Permutations(int n, int dig, int used, int num)
 {
    if(dig == n)
@@ -41,3 +50,4 @@ void Permutations(int n, int dig, int used, int num)
       }
    }
 }
+*/
