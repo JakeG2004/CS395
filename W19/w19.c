@@ -21,6 +21,7 @@ int SizeOfQueue(QNodePtr head);
 void EnqueueEdge(QNodePtr* head, int d1, int d2);
 int ContainsEdge(QNodePtr head, int q1, int q2);
 void PrintMatches(QNodePtr head);
+//void PrintMatches(int matches[], int nMatches, int numV);
 void RemoveEdge(QNodePtr* head, int q1, int q2);
 
 QNodePtr MaximumBipartiteMatching(QNodePtr* adjLists, int numV, int numU);
@@ -66,7 +67,7 @@ int main(int argc, char* argv[])
    // Print the lists
    for(int i = 0; i < numV; i++)
    {
-      printf("%i -> ", i);
+      printf("%i ->", i);
       PrintQueue(adjLists[i]);
       printf("\n");
    }
@@ -102,7 +103,7 @@ QNodePtr MaximumBipartiteMatching(QNodePtr* adjLists, int numV, int numU)
 
    while(!IsEmpty(Q))
    {
-      printf("Queue: ");
+      printf("Queue:");
       PrintQueue(Q);
       printf("\n");
 
@@ -128,7 +129,12 @@ QNodePtr MaximumBipartiteMatching(QNodePtr* adjLists, int numV, int numU)
                   RemoveEdge(&M, v, u);
                   v = labels[u];
                   EnqueueEdge(&M, v, u);
+                  matches[u] = v;
+                  matches[v] = u;
                }
+
+               //PrintQueue(M);
+               //printf("\n");
 
                // Remove all vertex labels
                for(int i = 0; i < numV + numU; i++)
@@ -142,7 +148,13 @@ QNodePtr MaximumBipartiteMatching(QNodePtr* adjLists, int numV, int numU)
                   Dequeue(&Q);
                }
 
-               printf("%i\n", SizeOfQueue(Q));
+               /*printf("matches:\n");
+               for(int i = 0; i < numV + numU; i++)
+               {
+                  printf("%i ", matches[i]);
+               }
+
+               printf("\n");*/
 
                // Reinit Q with all free vertices in V
                for(int i = 0; i < numV; i++)
@@ -179,7 +191,7 @@ QNodePtr MaximumBipartiteMatching(QNodePtr* adjLists, int numV, int numU)
       PrintMatches(M);
    }
 
-   // Return M
+   return M;
 }
 
 void PrintMatches(QNodePtr head)
@@ -326,19 +338,37 @@ int Dequeue(QNodePtr* head)
 
 void RemoveEdge(QNodePtr* head, int q1, int q2)
 {
-   QNodePtr p = (*head);
-   QNodePtr q = p -> next;
-   while(p != NULL)
-   {
-      if(p -> data == q1 && q -> data == q2)
-      {
-         Dequeue(head);
-         Dequeue(head);
-         return;
-      }
-      p = p -> next;
-   }
+    // Ensure the queue is not empty
+    if (*head == NULL) return;
+    
+    QNodePtr p = *head;
+    QNodePtr prev = NULL;  // To keep track of the previous node
+    
+    while (p != NULL && p->next != NULL)
+    {
+        // Check for q1, q2 pair
+        if ((p->data == q1 && p->next->data == q2) || (p->data == q2 && p->next->data == q1))
+        {
+            // If removing the first two nodes
+            if (prev == NULL) {
+                *head = p->next->next; // Update head to the node after the next one
+            } else {
+                prev->next = p->next->next; // Skip the two nodes
+            }
+
+            // Free the memory of the two nodes being removed
+            free(p->next);  // Free the second node in the pair
+            free(p);        // Free the first node in the pair
+            
+            return;  // After removal, we exit the function
+        }
+        
+        // Move to the next node in the queue
+        prev = p;
+        p = p->next;
+    }
 }
+
 
 int IsEmpty(QNodePtr head)
 {
@@ -349,7 +379,7 @@ void PrintQueue(QNodePtr head)
 {
    while(head != NULL)
    {
-      printf("%i ", head -> data);
+      printf(" %i", head -> data);
       head = head -> next;
    }
 }
