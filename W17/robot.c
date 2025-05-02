@@ -159,15 +159,17 @@ void PrintBoard(int width, int height, int** board)
    {
       for(int j = 0; j < width; j++)
       {
-         if(board[i][j] == -1)
-         {
-            printf("X\t");
-         }
-
-         else
-         {
-            printf("%i\t", board[i][j]);
-         }
+                    if (board[i][j] == -1)
+            {
+                printf("X  "); // X is a single character, so add two spaces
+            }
+            else
+            {
+                if (board[i][j] < 10)
+                    printf("%d  ", board[i][j]);  // 1-digit number + 2 spaces
+                else
+                    printf("%d ", board[i][j]);   // 2-digit number + 1 space
+            } 
       }
 
       printf("\n");
